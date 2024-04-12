@@ -1,13 +1,23 @@
+import 'package:cache_music_player/widgets/categories.dart';
 import 'package:flutter/material.dart';
+import 'package:cache_music_player/widgets/search_bar.dart' as CustomSearchBar;
 
 class SearchPage extends StatelessWidget {
-  const SearchPage({super.key});
+  const SearchPage({Key? key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Center(
-      child: Text("Search Page"),
-    ));
+      backgroundColor: Colors.white,
+      body: Column(
+        children: [
+          Container(
+            child: CustomSearchBar.SearchBar(),
+            padding: EdgeInsets.all(20),
+          ),
+          Expanded(child: Browser())
+        ],
+      ),
+    );
   }
 }
