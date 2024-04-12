@@ -31,7 +31,7 @@ class _FirstPageState extends State<FirstPage> {
       appBar: AppBar(
         backgroundColor: Colors.blue,
         title: Text(
-          "Music Player",
+          "Cache Music Player",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
