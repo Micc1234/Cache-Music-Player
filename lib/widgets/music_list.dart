@@ -9,21 +9,23 @@ class MusicList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(
-        builder: ((context, value, child) => ListView(
-              children: value.getMusicList().map((music) {
-                return MusicTile(
-                  music: music,
-                  favButtonFunc: () {
-                    if (!music.favorite) {
-                      context.read<DataProvider>().addToFav(music);
-                    } else {
-                      context.read<DataProvider>().removeFromFav(music);
-                    }
-                    ;
-                  },
-                  colorFunc: context.read<DataProvider>().colorFunc(music),
-                );
-              }).toList(),
+        builder: ((context, value, child) => SingleChildScrollView(
+              child: Column(
+                children: value.getMusicList().map((music) {
+                  return MusicTile(
+                    music: music,
+                    favButtonFunc: () {
+                      if (!music.favorite) {
+                        context.read<DataProvider>().addToFav(music);
+                      } else {
+                        context.read<DataProvider>().removeFromFav(music);
+                      }
+                      ;
+                    },
+                    colorFunc: context.read<DataProvider>().colorFunc(music),
+                  );
+                }).toList(),
+              ),
             )));
   }
 }

@@ -1,7 +1,26 @@
+import 'package:cache_music_player/models/hits_class_model.dart';
 import 'package:cache_music_player/models/music_class_model.dart';
 import 'package:flutter/material.dart';
 
 class DataProvider extends ChangeNotifier {
+  List<Hits> hitsData = [
+    Hits(
+        name: "Taylor Swift Eras Tour",
+        imgSrc:
+            "https://www.rollingstone.com/wp-content/uploads/2023/08/taylor-swift-eras-moments.jpg?w=1581&h=1054&crop=1"),
+    Hits(
+        name: "KPOP Hits 2022",
+        imgSrc:
+            "https://c.saavncdn.com/editorial/KPopHits2022_20231205072029.jpg"),
+    Hits(
+        name: "Tops Hits",
+        imgSrc:
+            "https://i.scdn.co/image/ab67616d0000b273674ee85ea544f17b5726c54b"),
+    Hits(
+        name: "Tiktok Hits",
+        imgSrc:
+            "https://i1.sndcdn.com/artworks-6e9dSkKPEWWT8IPM-uW8Zyw-t500x500.jpg")
+  ];
   List<Music> musicData = [
     Music(
       name: "Mine",
@@ -82,6 +101,10 @@ class DataProvider extends ChangeNotifier {
 
   List<Music> getFavList() {
     return favoriteData;
+  }
+
+  List<Hits> getHitsList() {
+    return hitsData;
   }
 
   Color colorFunc(Music music) {
