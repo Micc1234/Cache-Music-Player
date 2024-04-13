@@ -1,4 +1,4 @@
-import 'package:cache_music_player/widgets/categories.dart';
+import 'package:cache_music_player/widgets/browser.dart';
 import 'package:flutter/material.dart';
 import 'package:cache_music_player/widgets/search_bar.dart' as CustomSearchBar;
 
