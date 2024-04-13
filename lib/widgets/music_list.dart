@@ -20,7 +20,6 @@ class MusicList extends StatelessWidget {
                       } else {
                         context.read<DataProvider>().removeFromFav(music);
                       }
-                      ;
                     },
                     colorFunc: context.read<DataProvider>().colorFunc(music),
                   );

@@ -21,10 +21,8 @@ class FavoriteList extends StatelessWidget {
               ),
             ),
           )
-        : ListView.builder(
-            itemCount: favoriteList.length,
-            itemBuilder: (context, index) {
-              final music = favoriteList[index];
+        : Column(
+            children: favoriteList.map((music) {
               return MusicTile(
                 music: music,
                 favButtonFunc: () {
@@ -36,7 +34,7 @@ class FavoriteList extends StatelessWidget {
                 },
                 colorFunc: context.read<DataProvider>().colorFunc(music),
               );
-            },
+            }).toList(),
           );
   }
 }
