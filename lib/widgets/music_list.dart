@@ -1,3 +1,4 @@
+import 'package:cache_music_player/widgets/filter_music.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:cache_music_player/models/data_provider.dart';
@@ -9,22 +10,26 @@ class MusicList extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Consumer<DataProvider>(
-        builder: ((context, value, child) => SingleChildScrollView(
-              child: Column(
-                children: value.getMusicList().map((music) {
-                  return MusicTile(
-                    music: music,
-                    favButtonFunc: () {
-                      if (!music.favorite) {
-                        context.read<DataProvider>().addToFav(music);
-                      } else {
-                        context.read<DataProvider>().removeFromFav(music);
-                      }
-                    },
-                    colorFunc: context.read<DataProvider>().colorFunc(music),
-                  );
-                }).toList(),
-              ),
-            )));
+      builder: (context, value, child) {
+        return SingleChildScrollView(
+          child: Column(children: [
+            FilterMusic(),
+            ...value.getMusicList().map((music) {
+              return MusicTile(
+                music: music,
+                favButtonFunc: () {
+                  if (!music.favorite) {
+                    context.read<DataProvider>().addToFav(music);
+                  } else {
+                    context.read<DataProvider>().removeFromFav(music);
+                  }
+                },
+                colorFunc: context.read<DataProvider>().colorFunc(music),
+              );
+            }),
+          ]),
+        );
+      },
+    );
   }
 }

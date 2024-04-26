@@ -3,7 +3,7 @@ import 'package:cache_music_player/models/music_class_model.dart';
 import 'package:flutter/material.dart';
 
 class DataProvider extends ChangeNotifier {
-  List<Hits> hitsData = [
+  final List<Hits> _hitsData = [
     Hits(
         name: "Taylor Swift Eras Tour",
         imgSrc:
@@ -21,90 +21,106 @@ class DataProvider extends ChangeNotifier {
         imgSrc:
             "https://i1.sndcdn.com/artworks-6e9dSkKPEWWT8IPM-uW8Zyw-t500x500.jpg")
   ];
-  List<Music> musicData = [
+  final List<Music> _musicData = [
     Music(
-      name: "Mine",
-      singer: "Petra Sihombing",
-      imgSrc:
-          "https://pophariini.com/wp-content/uploads/2020/06/Petra-Profil-Manusia-Kasur.jpg",
-      favorite: false,
-    ),
+        name: "Monokrom",
+        singer: "Tulus",
+        imgSrc:
+            "https://i.scdn.co/image/ab67616d0000b27371c65edbeed32af70b900637",
+        favorite: false,
+        lang: "Indonesian"),
     Music(
-      name: "Reckless",
-      singer: "Madison Beer",
-      imgSrc:
-          "https://assets.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/2022/01/19/1827821676.png",
-      favorite: false,
-    ),
+        name: "Mine",
+        singer: "Petra Sihombing",
+        imgSrc:
+            "https://pophariini.com/wp-content/uploads/2020/06/Petra-Profil-Manusia-Kasur.jpg",
+        favorite: false,
+        lang: "English"),
     Music(
-      name: "Photograph",
-      singer: "Ed Sheeran",
-      imgSrc:
-          "https://i.scdn.co/image/ab67616d0000b273ee4c02e63b2b3452322184d7",
-      favorite: false,
-    ),
+        name: "Reckless",
+        singer: "Madison Beer",
+        imgSrc:
+            "https://assets.promediateknologi.id/crop/0x0:0x0/750x500/webp/photo/2022/01/19/1827821676.png",
+        favorite: false,
+        lang: "English"),
     Music(
-      name: "Imagination",
-      singer: "Shawn Mendes",
-      imgSrc:
-          "https://i.scdn.co/image/ab67616d00001e022d6a4125a1d62dc6185f74ea",
-      favorite: false,
-    ),
+        name: "Photograph",
+        singer: "Ed Sheeran",
+        imgSrc:
+            "https://i.scdn.co/image/ab67616d0000b273ee4c02e63b2b3452322184d7",
+        favorite: false,
+        lang: "English"),
     Music(
-      name: "Until I Found You",
-      singer: "Stephen Sanchez",
-      imgSrc:
-          "https://imgx.sonora.id/crop/0x69:640x515/x/photo/2022/08/17/until-ijpg-20220817015235.jpg",
-      favorite: false,
-    ),
+        name: "Imagination",
+        singer: "Shawn Mendes",
+        imgSrc:
+            "https://i.scdn.co/image/ab67616d00001e022d6a4125a1d62dc6185f74ea",
+        favorite: false,
+        lang: "English"),
     Music(
-      name: "Everything I Need",
-      singer: "Skylar Grey",
-      imgSrc:
-          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt8pIPnJ6BCwfKzPsA2bN0GKDmzpnXpDUsfBdlAZbYOA&s",
-      favorite: false,
-    ),
+        name: "Until I Found You",
+        singer: "Stephen Sanchez",
+        imgSrc:
+            "https://imgx.sonora.id/crop/0x69:640x515/x/photo/2022/08/17/until-ijpg-20220817015235.jpg",
+        favorite: false,
+        lang: "English"),
     Music(
-      name: "Monokrom",
-      singer: "Tulus",
-      imgSrc:
-          "https://i.scdn.co/image/ab67616d0000b27371c65edbeed32af70b900637",
-      favorite: false,
-    ),
+        name: "Everything I Need",
+        singer: "Skylar Grey",
+        imgSrc:
+            "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQt8pIPnJ6BCwfKzPsA2bN0GKDmzpnXpDUsfBdlAZbYOA&s",
+        favorite: false,
+        lang: "English"),
     Music(
-      name: "Happy",
-      singer: "skinnyfabs",
-      imgSrc: "https://i1.sndcdn.com/artworks-000574130099-a7nis8-t500x500.jpg",
-      favorite: false,
-    ),
+        name: "Happy",
+        singer: "skinnyfabs",
+        imgSrc:
+            "https://i1.sndcdn.com/artworks-000574130099-a7nis8-t500x500.jpg",
+        favorite: false,
+        lang: "English"),
     Music(
-      name: "Bertaut",
-      singer: "Nadin Amizah",
-      imgSrc:
-          "https://i.scdn.co/image/ab67616d0000b2736d57a5c60decaa8fb39d5afb",
-      favorite: false,
-    ),
+        name: "Bertaut",
+        singer: "Nadin Amizah",
+        imgSrc:
+            "https://i.scdn.co/image/ab67616d0000b2736d57a5c60decaa8fb39d5afb",
+        favorite: false,
+        lang: "Indonesian"),
     Music(
-      name: "Love Story",
-      singer: "Taylor Swift",
-      imgSrc:
-          "https://americannoise.com/wp-content/uploads/2018/07/Taylor-Swift-Love-Story-1200x900.jpg",
-      favorite: false,
-    ),
+        name: "Love Story",
+        singer: "Taylor Swift",
+        imgSrc:
+            "https://americannoise.com/wp-content/uploads/2018/07/Taylor-Swift-Love-Story-1200x900.jpg",
+        favorite: false,
+        lang: "English"),
   ];
 
-  List<Music> favoriteData = [];
+  List<Music> _filteredMusicList = [];
+  DataProvider() {
+    _filteredMusicList = _musicData;
+  }
+
+  List<Music> _favoriteData = [];
 
   List<Music> getMusicList() {
-    return musicData;
+    return _filteredMusicList;
+  }
+
+  void filterMusic(String filterValue) {
+    if (filterValue == 'All') {
+      _filteredMusicList = _musicData;
+    } else {
+      _filteredMusicList =
+          _musicData.where((music) => music.lang == filterValue).toList();
+    }
+    notifyListeners();
   }
 
   List<Music> getFavList() {
-    return favoriteData;
+    return _favoriteData;
   }
 
   List<Hits> getHitsList() {
-    return hitsData;
+    return _hitsData;
   }
 
   Color colorFunc(Music music) {
@@ -112,13 +128,13 @@ class DataProvider extends ChangeNotifier {
   }
 
   void addToFav(Music music) {
-    favoriteData.add(music);
+    _favoriteData.add(music);
     music.toggleFavorite();
     notifyListeners();
   }
 
   void removeFromFav(Music music) {
-    favoriteData.remove(music);
+    _favoriteData.remove(music);
     music.toggleFavorite();
     notifyListeners();
   }
