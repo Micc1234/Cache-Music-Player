@@ -9,12 +9,22 @@ class FilterMusic extends StatefulWidget {
   State<FilterMusic> createState() => _FilterMusicState();
 }
 
-class _FilterMusicState extends State<FilterMusic> {
+class _FilterMusicState extends State<FilterMusic> with AutomaticKeepAliveClientMixin {
   List<String> _filterValues = ['All', 'Indonesian', 'English'];
   String _selectedFilter = 'All';
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
+  void initState() {
+    super.initState();
+    _selectedFilter = PageStorage.of(context).readState(context, identifier: 'selectedFilter') as String? ?? 'All';
+  }
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context);
     return Wrap(
       spacing: 20,
       children: _filterValues.map((value) {
@@ -24,7 +34,8 @@ class _FilterMusicState extends State<FilterMusic> {
           onSelected: (selected) {
             setState(() {
               _selectedFilter = selected ? value : 'All';
-              context.read<DataProvider>().filterMusic(value);
+              PageStorage.of(context).writeState(context, _selectedFilter, identifier: 'selectedFilter');
+              context.read<DataProvider>().filterMusic(_selectedFilter);
             });
           },
         );
