@@ -7,7 +7,7 @@ class NotificationPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        backgroundColor: Colors.purple,
         title: Text(
           "Cache Music Player",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),

@@ -44,7 +44,7 @@ class _FirstPageState extends State<FirstPage> {
           icon: Icon(Icons.list_rounded),
           onPressed: () {},
         ),
-        backgroundColor: Color.fromARGB(255, 213, 122, 255),
+        backgroundColor: Colors.purple,
         title: Text(
           "Cache Music Player",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
