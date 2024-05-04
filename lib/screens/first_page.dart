@@ -30,51 +30,120 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.push(
-              context, MaterialPageRoute(builder: (context) => LoginPage()));
-        },
-        child: Icon(Icons.logout),
-      ),
-      appBar: AppBar(
-        leading: IconButton(
-          iconSize: 35,
-          color: Colors.white,
-          icon: Icon(Icons.list_rounded),
-          onPressed: () {},
-        ),
-        backgroundColor: Colors.purple,
-        title: Text(
-          "Cache Music Player",
-          style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (context) => NotificationPage()));
-            },
-            icon: Icon(
-              Icons.notifications,
+      drawer: Drawer(
+        child: ListView(
+          padding: EdgeInsets.zero,
+          children: <Widget>[
+            DrawerHeader(
+              decoration: BoxDecoration(
+                color: Colors.purple,
+              ),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CircleAvatar(
+                    radius: 30,
+                    backgroundImage: AssetImage('assets/profile_pic.jpg'), // Add your profile picture asset
+                  ),
+                  SizedBox(height: 10),
+                  Text(
+                    'John Doe', // Your user's name
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 18,
+                    ),
+                  ),
+                  Text(
+                    'View profile', // Your user's email
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
             ),
-            iconSize: 35,
-            color: Colors.white,
-          )
-        ],
-        centerTitle: true,
+            ListTile(
+              leading: Icon(Icons.bolt),
+              title: Text("What's new"),
+              onTap: () {
+                // Add navigation here if needed
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.trending_up),
+              title: Text('Your Sound Capsule'),
+              onTap: () {
+                // Add navigation here if needed
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.history),
+              title: Text('Listening history'),
+              onTap: () {
+                // Add navigation here if needed
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.settings),
+              title: Text('setting and privacy'),
+              onTap: () {
+                // Add navigation here if needed
+              },
+            ),
+          ],
+        ),
+      ),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0), // Set preferred height of AppBar
+        child: AppBar(
+          backgroundColor: Colors.purple,
+          title: Text(
+            "Cache Music Player",
+            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+          ),
+          actions: [
+            IconButton(
+              onPressed: () {
+                Navigator.push(context,
+                    MaterialPageRoute(builder: (context) => NotificationPage()));
+              },
+              icon: Icon(
+                Icons.notifications,
+              ),
+              iconSize: 35,
+              color: Colors.white,
+            )
+          ],
+          centerTitle: true,
+          leading: Builder(
+            builder: (context) => GestureDetector(
+              onTap: () {
+                Scaffold.of(context).openDrawer();
+              },
+              child: Padding(
+                padding: EdgeInsets.all(8.0),
+                child: CircleAvatar(
+                  radius: 20,
+                  backgroundImage: AssetImage('assets/profile_pic.jpg'), // Add your profile picture asset
+                ),
+              ),
+            ),
+          ),
+        ),
       ),
       body: pages[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
-          currentIndex: selectedIndex,
-          onTap: navigate,
-          fixedColor: Colors.purple,
-          items: [
-            BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
-            BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
-            BottomNavigationBarItem(
-                icon: Icon(Icons.favorite), label: "Favorite"),
-          ]),
+        currentIndex: selectedIndex,
+        onTap: navigate,
+        fixedColor: Colors.purple,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
+          BottomNavigationBarItem(
+              icon: Icon(Icons.favorite), label: "Favorite"),
+        ],
+      ),
     );
   }
 }
