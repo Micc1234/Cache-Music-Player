@@ -1,3 +1,5 @@
+import 'package:cache_music_player/screens/login_page.dart';
+import 'package:cache_music_player/screens/notification_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cache_music_player/screens/home_page.dart';
 import 'package:cache_music_player/screens/search_page.dart';
@@ -28,19 +30,45 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+              context, MaterialPageRoute(builder: (context) => LoginPage()));
+        },
+        child: Icon(Icons.logout),
+      ),
       appBar: AppBar(
-        backgroundColor: Colors.blue,
+        leading: IconButton(
+          iconSize: 35,
+          color: Colors.white,
+          icon: Icon(Icons.list_rounded),
+          onPressed: () {},
+        ),
+        backgroundColor: Color.fromARGB(255, 213, 122, 255),
         title: Text(
           "Cache Music Player",
           style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
         ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (context) => NotificationPage()));
+            },
+            icon: Icon(
+              Icons.notifications,
+            ),
+            iconSize: 35,
+            color: Colors.white,
+          )
+        ],
         centerTitle: true,
       ),
       body: pages[selectedIndex],
       bottomNavigationBar: BottomNavigationBar(
           currentIndex: selectedIndex,
           onTap: navigate,
-          fixedColor: Colors.blue,
+          fixedColor: Colors.purple,
           items: [
             BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
             BottomNavigationBarItem(icon: Icon(Icons.search), label: "Search"),
