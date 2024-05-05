@@ -1,9 +1,11 @@
 import 'package:cache_music_player/screens/login_page.dart';
 import 'package:cache_music_player/screens/notification_page.dart';
+import 'package:cache_music_player/widgets/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cache_music_player/screens/home_page.dart';
 import 'package:cache_music_player/screens/search_page.dart';
 import 'package:cache_music_player/screens/favorite_page.dart';
+import 'package:provider/provider.dart';
 
 class FirstPage extends StatefulWidget {
   FirstPage({super.key});
@@ -41,9 +43,22 @@ class _FirstPageState extends State<FirstPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  CircleAvatar(
-                    radius: 30,
-                    backgroundImage: AssetImage('assets/profile_pic.jpg'), // Add your profile picture asset
+                  Row(
+                    children: [
+                      CircleAvatar(
+                        radius: 30,
+                        backgroundImage: AssetImage(
+                            'assets/profile_pic.jpg'), // Add your profile picture asset
+                      ),
+                      Spacer(),
+                      Switch(
+                        value: Provider.of<ThemeProvider>(context).isDarkMode,
+                        onChanged: (newValue) {
+                          Provider.of<ThemeProvider>(context, listen: false)
+                              .toggleTheme();
+                        },
+                      ),
+                    ],
                   ),
                   SizedBox(height: 10),
                   Text(
@@ -105,8 +120,10 @@ class _FirstPageState extends State<FirstPage> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (context) => NotificationPage()));
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => NotificationPage()));
               },
               icon: Icon(
                 Icons.notifications,
@@ -125,7 +142,8 @@ class _FirstPageState extends State<FirstPage> {
                 padding: EdgeInsets.all(8.0),
                 child: CircleAvatar(
                   radius: 20,
-                  backgroundImage: AssetImage('assets/profile_pic.jpg'), // Add your profile picture asset
+                  backgroundImage: AssetImage(
+                      'assets/profile_pic.jpg'), // Add your profile picture asset
                 ),
               ),
             ),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class SearchBar extends StatefulWidget {
   @override
@@ -10,7 +11,6 @@ class _SearchBarState extends State<SearchBar> {
 
   @override
   void dispose() {
-    // Clean up the controller when the widget is disposed
     _searchController.dispose();
     super.dispose();
   }
@@ -21,23 +21,78 @@ class _SearchBarState extends State<SearchBar> {
       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Colors.black,
+        color: Theme.of(context).backgroundColor,
       ),
       child: TextField(
         controller: _searchController,
-        style: TextStyle(color: Colors.white),
+        style: TextStyle(color: Theme.of(context).textTheme.bodyText1?.color),
         decoration: InputDecoration(
           hintText: 'What do you want to listen to?',
-          hintStyle: TextStyle(color: Colors.white),
+          hintStyle: TextStyle(color: Theme.of(context).hintColor),
           suffixIcon: IconButton(
-            icon: Icon(Icons.search, color: Colors.white),
+            icon: Icon(
+              Icons.search,
+              color: Theme.of(context).iconTheme.color,
+            ),
             onPressed: () {
-              // Perform search action here, using _searchController.text
               print('Search: ${_searchController.text}');
             },
           ),
         ),
       ),
     );
+  }
+}
+
+void main() {
+  runApp(
+    MyApp(),
+  );
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return ChangeNotifierProvider(
+      create: (context) => ThemeProvider(),
+      child: Consumer<ThemeProvider>(
+        builder: (context, themeProvider, child) {
+          return MaterialApp(
+            theme: ThemeData.light(),
+            darkTheme: ThemeData.dark(),
+            themeMode: themeProvider.currentTheme,
+            home: Scaffold(
+              appBar: AppBar(
+                title: Text('Search Bar Demo'),
+                actions: [
+                  IconButton(
+                    icon: Icon(Icons.lightbulb),
+                    onPressed: () {
+                      themeProvider.toggleTheme();
+                    },
+                  ),
+                ],
+              ),
+              body: Center(
+                child: SearchBar(),
+              ),
+            ),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ThemeProvider with ChangeNotifier {
+  bool _isDarkMode = false;
+
+  bool get isDarkMode => _isDarkMode;
+
+  ThemeMode get currentTheme => _isDarkMode ? ThemeMode.dark : ThemeMode.light;
+
+  void toggleTheme() {
+    _isDarkMode = !_isDarkMode;
+    notifyListeners();
   }
 }
