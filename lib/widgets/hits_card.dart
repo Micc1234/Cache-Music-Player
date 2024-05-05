@@ -7,11 +7,14 @@ class HitsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Card(
-      elevation: 10,
+    return InkWell(
+      onTap: () {},
       child: Container(
-        color: Colors.white,
         height: 200,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(width: 0.05),
+        ),
         child: Column(
           children: [
             Image.network(hits.imgSrc,
