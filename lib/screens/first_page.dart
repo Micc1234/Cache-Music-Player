@@ -35,7 +35,7 @@ class _FirstPageState extends State<FirstPage> {
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
-          children: <Widget>[
+          children: [
             DrawerHeader(
               decoration: BoxDecoration(
                 color: Colors.purple,
@@ -46,9 +46,9 @@ class _FirstPageState extends State<FirstPage> {
                   Row(
                     children: [
                       CircleAvatar(
+                        child: Icon(Icons.account_circle_rounded),
                         radius: 30,
-                        backgroundImage: AssetImage(
-                            'assets/profile_pic.jpg'), // Add your profile picture asset
+                        // backgroundImage: AssetImage('assets/profile_pic.jpg'),
                       ),
                       Spacer(),
                       Switch(
@@ -62,14 +62,14 @@ class _FirstPageState extends State<FirstPage> {
                   ),
                   SizedBox(height: 10),
                   Text(
-                    'John Doe', // Your user's name
+                    'John Doe',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
                     ),
                   ),
                   Text(
-                    'View profile', // Your user's email
+                    'View profile',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 14,
@@ -81,36 +81,28 @@ class _FirstPageState extends State<FirstPage> {
             ListTile(
               leading: Icon(Icons.bolt),
               title: Text("What's new"),
-              onTap: () {
-                // Add navigation here if needed
-              },
+              onTap: () {},
             ),
             ListTile(
               leading: Icon(Icons.trending_up),
               title: Text('Your Sound Capsule'),
-              onTap: () {
-                // Add navigation here if needed
-              },
+              onTap: () {},
             ),
             ListTile(
               leading: Icon(Icons.history),
               title: Text('Listening history'),
-              onTap: () {
-                // Add navigation here if needed
-              },
+              onTap: () {},
             ),
             ListTile(
               leading: Icon(Icons.settings),
               title: Text('setting and privacy'),
-              onTap: () {
-                // Add navigation here if needed
-              },
+              onTap: () {},
             ),
           ],
         ),
       ),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0), // Set preferred height of AppBar
+        preferredSize: Size.fromHeight(60.0),
         child: AppBar(
           backgroundColor: Colors.purple,
           title: Text(
@@ -138,13 +130,18 @@ class _FirstPageState extends State<FirstPage> {
               onTap: () {
                 Scaffold.of(context).openDrawer();
               },
-              child: Padding(
-                padding: EdgeInsets.all(8.0),
-                child: CircleAvatar(
-                  radius: 20,
-                  backgroundImage: AssetImage(
-                      'assets/profile_pic.jpg'), // Add your profile picture asset
-                ),
+              // child: Padding(
+              //   padding: EdgeInsets.all(8.0),
+              //   child: CircleAvatar(
+              //     radius: 20,
+              //     backgroundImage: AssetImage(
+              //         'assets/profile_pic.jpg'),
+              //   ),
+              // ),
+              child: Icon(
+                Icons.account_circle_rounded,
+                color: Colors.white,
+                size: 35,
               ),
             ),
           ),
