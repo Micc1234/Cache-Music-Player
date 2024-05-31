@@ -1,3 +1,4 @@
+import 'package:cache_music_player/screens/music_player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cache_music_player/models/music_class_model.dart';
 
@@ -18,7 +19,10 @@ class MusicTile extends StatelessWidget {
       padding: const EdgeInsets.fromLTRB(15, 20, 15, 0),
       child: InkWell(
         onTap: () {
-          // Handle tap here
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => MusicPlayer(music: music)),
+          );
         },
         child: Container(
           padding: EdgeInsets.only(right: 10),

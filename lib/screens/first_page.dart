@@ -1,5 +1,6 @@
 import 'package:cache_music_player/screens/login_page.dart';
 import 'package:cache_music_player/screens/notification_page.dart';
+import 'package:cache_music_player/widgets/rating_dialog.dart';
 import 'package:cache_music_player/widgets/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:cache_music_player/screens/home_page.dart';
@@ -32,6 +33,15 @@ class _FirstPageState extends State<FirstPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showDialog(
+            context: context,
+            builder: (context) => RatingDialog(),
+          );
+        },
+        child: Icon(Icons.star),
+      ),
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -112,13 +122,33 @@ class _FirstPageState extends State<FirstPage> {
           actions: [
             IconButton(
               onPressed: () {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => NotificationPage()));
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: Text('Logout'),
+                    content: Text('Are you sure you want to logout?'),
+                    actions: [
+                      TextButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Text('Cancel'),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => LoginPage()));
+                        },
+                        child: Text('Logout'),
+                      ),
+                    ],
+                  ),
+                );
               },
               icon: Icon(
-                Icons.notifications,
+                Icons.logout,
               ),
               iconSize: 35,
               color: Colors.white,

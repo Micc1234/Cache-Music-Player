@@ -15,6 +15,18 @@ class SearchPage extends StatelessWidget {
             child: CustomSearchBar.SearchBar(),
             padding: EdgeInsets.all(20),
           ),
+          Padding(
+            padding: const EdgeInsets.only(left: 10),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text(
+                  "Browse All",
+                  style: TextStyle(fontSize: 20),
+                ),
+              ],
+            ),
+          ),
           Expanded(child: Browser())
         ],
       ),

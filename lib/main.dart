@@ -1,3 +1,5 @@
+import 'package:cache_music_player/models/music_class_model.dart';
+import 'package:cache_music_player/screens/music_player_page.dart';
 import 'package:cache_music_player/widgets/theme_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -20,6 +22,13 @@ void main() {
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    Music sample = Music(
+        name: "Monokrom",
+        singer: "Tulus",
+        imgSrc:
+            "https://i.scdn.co/image/ab67616d0000b27371c65edbeed32af70b900637",
+        favorite: false,
+        lang: "Indonesian");
     return Consumer<ThemeProvider>(
       builder: (context, themeProvider, _) {
         return MaterialApp(
@@ -27,7 +36,7 @@ class MyApp extends StatelessWidget {
           theme: ThemeData.light(),
           darkTheme: ThemeData.dark(),
           themeMode: themeProvider.currentTheme,
-          home: LoginPage(),
+          home: FirstPage(),
         );
       },
     );

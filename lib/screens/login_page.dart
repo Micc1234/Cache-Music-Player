@@ -14,8 +14,6 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController emailC = TextEditingController();
   TextEditingController passwordC = TextEditingController();
 
-  String errorMessage = "";
-
   void _login() {
     String email = emailC.text;
     String password = passwordC.text;
@@ -26,9 +24,12 @@ class _LoginPageState extends State<LoginPage> {
       Navigator.push(
           context, MaterialPageRoute(builder: (context) => FirstPage()));
     } else {
-      setState(() {
-        errorMessage = "Invalid email or password";
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Invalid email or password"),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
 
@@ -40,6 +41,12 @@ class _LoginPageState extends State<LoginPage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            TextButton(
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => FirstPage()));
+                },
+                child: Text("Shortcut")),
             Text(
               "Login",
               style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
@@ -75,10 +82,6 @@ class _LoginPageState extends State<LoginPage> {
                       _login();
                     },
                     child: Text("Login"))),
-            Text(
-              errorMessage,
-              style: TextStyle(color: Colors.red),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [

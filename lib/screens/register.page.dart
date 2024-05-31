@@ -14,37 +14,36 @@ class _RegisterPageState extends State<RegisterPage> {
   TextEditingController emailC = TextEditingController();
   TextEditingController passwordC = TextEditingController();
 
-  String errorMessage = "";
-
   void _register() {
     String username = usernameC.text;
     String email = emailC.text;
     String password = passwordC.text;
 
-    setState(() {
-      errorMessage = "";
-    });
-
-    //check empty
     if (username.isEmpty || email.isEmpty || password.isEmpty) {
-      setState(() {
-        errorMessage = "Username, email, or password cannot be empty.";
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("Username, email, or password cannot be empty."),
+          backgroundColor: Colors.red,
+        ),
+      );
       return;
     }
 
-    //check exist
+    // Check if the user already exists
     bool userExists =
         users.any((user) => user.username == username || user.email == email);
 
     if (userExists) {
-      setState(() {
-        errorMessage = "User with the same username, or email already exists.";
-      });
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("User with the same username or email already exists."),
+          backgroundColor: Colors.red,
+        ),
+      );
       return;
     }
 
-    //success
+    // Success
     addUser(username, email, password);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => LoginPage()));
@@ -101,10 +100,6 @@ class _RegisterPageState extends State<RegisterPage> {
                       _register();
                     },
                     child: Text("Register"))),
-            Text(
-              errorMessage,
-              style: TextStyle(color: Colors.red),
-            ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
