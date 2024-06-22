@@ -1,4 +1,5 @@
 class Music {
+  int id;
   String name;
   String singer;
   String imgSrc;
@@ -6,7 +7,8 @@ class Music {
   String lang;
 
   Music(
-      {required this.name,
+      {required this.id,
+      required this.name,
       required this.singer,
       required this.imgSrc,
       required this.favorite,

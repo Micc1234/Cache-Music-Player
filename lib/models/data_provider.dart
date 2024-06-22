@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:cache_music_player/models/hits_class_model.dart';
 import 'package:cache_music_player/models/music_class_model.dart';
 import 'package:flutter/material.dart';
@@ -21,8 +23,10 @@ class DataProvider extends ChangeNotifier {
         imgSrc:
             "https://i1.sndcdn.com/artworks-6e9dSkKPEWWT8IPM-uW8Zyw-t500x500.jpg")
   ];
+
   final List<Music> _musicData = [
     Music(
+        id: 1,
         name: "Monokrom",
         singer: "Tulus",
         imgSrc:
@@ -30,6 +34,7 @@ class DataProvider extends ChangeNotifier {
         favorite: false,
         lang: "Indonesian"),
     Music(
+        id: 2,
         name: "Mine",
         singer: "Petra Sihombing",
         imgSrc:
@@ -37,6 +42,7 @@ class DataProvider extends ChangeNotifier {
         favorite: false,
         lang: "English"),
     Music(
+        id: 3,
         name: "Reckless",
         singer: "Madison Beer",
         imgSrc:
@@ -44,6 +50,7 @@ class DataProvider extends ChangeNotifier {
         favorite: false,
         lang: "English"),
     Music(
+        id: 4,
         name: "Photograph",
         singer: "Ed Sheeran",
         imgSrc:
@@ -51,6 +58,7 @@ class DataProvider extends ChangeNotifier {
         favorite: false,
         lang: "English"),
     Music(
+        id: 5,
         name: "Imagination",
         singer: "Shawn Mendes",
         imgSrc:
@@ -58,6 +66,7 @@ class DataProvider extends ChangeNotifier {
         favorite: false,
         lang: "English"),
     Music(
+        id: 6,
         name: "Until I Found You",
         singer: "Stephen Sanchez",
         imgSrc:
@@ -65,6 +74,7 @@ class DataProvider extends ChangeNotifier {
         favorite: false,
         lang: "English"),
     Music(
+        id: 7,
         name: "Everything I Need",
         singer: "Skylar Grey",
         imgSrc:
@@ -72,6 +82,7 @@ class DataProvider extends ChangeNotifier {
         favorite: false,
         lang: "English"),
     Music(
+        id: 8,
         name: "Happy",
         singer: "skinnyfabs",
         imgSrc:
@@ -79,6 +90,7 @@ class DataProvider extends ChangeNotifier {
         favorite: false,
         lang: "English"),
     Music(
+        id: 9,
         name: "Bertaut",
         singer: "Nadin Amizah",
         imgSrc:
@@ -86,6 +98,7 @@ class DataProvider extends ChangeNotifier {
         favorite: false,
         lang: "Indonesian"),
     Music(
+        id: 10,
         name: "Love Story",
         singer: "Taylor Swift",
         imgSrc:
@@ -137,5 +150,16 @@ class DataProvider extends ChangeNotifier {
     _favoriteData.remove(music);
     music.toggleFavorite();
     notifyListeners();
+  }
+
+  Music getRandomMusic(Music currentMusic) {
+    Random random = Random();
+    Music randomMusic;
+
+    do {
+      randomMusic = _musicData[random.nextInt(_musicData.length)];
+    } while (randomMusic == currentMusic);
+
+    return randomMusic;
   }
 }

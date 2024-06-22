@@ -1,22 +1,27 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:cache_music_player/models/data_provider.dart';
 import 'package:cache_music_player/models/music_class_model.dart';
 import 'package:cache_music_player/screens/first_page.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 class MusicPlayer extends StatefulWidget {
-  MusicPlayer({super.key, required this.music});
+  MusicPlayer({Key? key, required this.music}) : super(key: key);
 
-  Music music;
+  final Music music;
+
   @override
-  State<MusicPlayer> createState() => _MusicPlayerState();
+  _MusicPlayerState createState() => _MusicPlayerState();
 }
 
 class _MusicPlayerState extends State<MusicPlayer> {
-  final audioPlayer = AudioPlayer();
+  final AudioPlayer audioPlayer = AudioPlayer();
   bool isPlaying = false;
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
+  bool isHighQuality = false;
 
+  @override
   void initState() {
     super.initState();
 
@@ -42,8 +47,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
   }
 
   Future setAudio() async {
-    audioPlayer.setSource(
-        AssetSource(widget.music.name + widget.music.singer + ".mp3"));
+    audioPlayer.setSource(AssetSource(widget.music.id.toString() + ".mp3"));
   }
 
   String formatTime(Duration duration) {
@@ -54,7 +58,65 @@ class _MusicPlayerState extends State<MusicPlayer> {
     final minutes = twoDigits(duration.inMinutes.remainder(60));
     final seconds = twoDigits(duration.inSeconds.remainder(60));
 
-    return minutes + " : " + seconds;
+    return '$minutes : $seconds';
+  }
+
+  void _showBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      builder: (context) {
+        final provider = Provider.of<DataProvider>(context, listen: false);
+        bool isFavorite = provider.getFavList().contains(widget.music);
+
+        return StatefulBuilder(
+          builder: (context, setState) {
+            return Container(
+              padding: EdgeInsets.all(16),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  ListTile(
+                    leading: CircleAvatar(
+                      backgroundImage: NetworkImage(widget.music.imgSrc),
+                    ),
+                    title: Text(widget.music.name),
+                    subtitle: Text(widget.music.singer),
+                  ),
+                  Divider(),
+                  ListTile(
+                    leading: Icon(
+                      isFavorite ? Icons.favorite : Icons.favorite_border,
+                      color: isFavorite ? Colors.red : null,
+                    ),
+                    title: Text(isFavorite
+                        ? 'Remove from Favorite'
+                        : 'Add to Favorite'),
+                    onTap: () {
+                      if (isFavorite) {
+                        provider.removeFromFav(widget.music);
+                      } else {
+                        provider.addToFav(widget.music);
+                      }
+                      Navigator.pop(context);
+                    },
+                  ),
+                  SwitchListTile(
+                    title: Text('High Quality'),
+                    secondary: Icon(Icons.audiotrack),
+                    value: isHighQuality,
+                    onChanged: (value) {
+                      setState(() {
+                        isHighQuality = value;
+                      });
+                    },
+                  ),
+                ],
+              ),
+            );
+          },
+        );
+      },
+    );
   }
 
   @override
@@ -70,15 +132,23 @@ class _MusicPlayerState extends State<MusicPlayer> {
         leading: IconButton(
           onPressed: () async {
             await audioPlayer.stop();
-            Navigator.push(
-                context, MaterialPageRoute(builder: (context) => FirstPage()));
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => FirstPage()),
+            );
           },
-          icon: Icon(
-            Icons.arrow_back_sharp,
-          ),
+          icon: Icon(Icons.arrow_back_sharp),
           iconSize: 35,
           color: Colors.white,
         ),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.more_vert),
+            iconSize: 35,
+            color: Colors.white,
+            onPressed: _showBottomSheet,
+          ),
+        ],
       ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -114,24 +184,60 @@ class _MusicPlayerState extends State<MusicPlayer> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(formatTime(position)),
-                Text(formatTime(duration - position))
+                Text(formatTime(duration - position)),
               ],
             ),
           ),
-          CircleAvatar(
-            radius: 35,
-            child: IconButton(
-              iconSize: 50,
-              icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
-              onPressed: () async {
-                if (isPlaying) {
-                  await audioPlayer.pause();
-                } else {
-                  await audioPlayer.resume();
-                }
-              },
-            ),
-          )
+          SizedBox(height: 32),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            children: [
+              IconButton(
+                icon: Icon(Icons.skip_previous),
+                iconSize: 50,
+                onPressed: () async {
+                  await audioPlayer.stop();
+                  final prevMusic =
+                      Provider.of<DataProvider>(context, listen: false)
+                          .getRandomMusic(widget.music);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MusicPlayer(music: prevMusic)),
+                  );
+                },
+              ),
+              CircleAvatar(
+                radius: 35,
+                child: IconButton(
+                  iconSize: 50,
+                  icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                  onPressed: () async {
+                    if (isPlaying) {
+                      await audioPlayer.pause();
+                    } else {
+                      await audioPlayer.resume();
+                    }
+                  },
+                ),
+              ),
+              IconButton(
+                icon: Icon(Icons.skip_next),
+                iconSize: 50,
+                onPressed: () async {
+                  await audioPlayer.stop();
+                  final nextMusic =
+                      Provider.of<DataProvider>(context, listen: false)
+                          .getRandomMusic(widget.music);
+                  Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => MusicPlayer(music: nextMusic)),
+                  );
+                },
+              ),
+            ],
+          ),
         ],
       ),
     );
