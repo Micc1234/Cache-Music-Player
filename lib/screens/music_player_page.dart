@@ -6,9 +6,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MusicPlayer extends StatefulWidget {
-  MusicPlayer({Key? key, required this.music}) : super(key: key);
+  MusicPlayer({Key? key, required this.musicList, required this.initialIndex}) : super(key: key);
 
-  final Music music;
+  final List<Music> musicList;
+  final int initialIndex;
 
   @override
   _MusicPlayerState createState() => _MusicPlayerState();
@@ -20,10 +21,14 @@ class _MusicPlayerState extends State<MusicPlayer> {
   Duration duration = Duration.zero;
   Duration position = Duration.zero;
   bool isHighQuality = false;
+  late PageController _pageController;
+  int currentIndex = 0;
 
   @override
   void initState() {
     super.initState();
+    currentIndex = widget.initialIndex;
+    _pageController = PageController(initialPage: currentIndex);
 
     setAudio();
 
@@ -47,7 +52,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
   }
 
   Future setAudio() async {
-    audioPlayer.setSource(AssetSource(widget.music.id.toString() + ".mp3"));
+    audioPlayer.setSource(AssetSource(widget.musicList[currentIndex].id.toString() + ".mp3"));
   }
 
   String formatTime(Duration duration) {
@@ -66,7 +71,7 @@ class _MusicPlayerState extends State<MusicPlayer> {
       context: context,
       builder: (context) {
         final provider = Provider.of<DataProvider>(context, listen: false);
-        bool isFavorite = provider.getFavList().contains(widget.music);
+        bool isFavorite = provider.getFavList().contains(widget.musicList[currentIndex]);
 
         return StatefulBuilder(
           builder: (context, setState) {
@@ -77,10 +82,10 @@ class _MusicPlayerState extends State<MusicPlayer> {
                 children: [
                   ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: NetworkImage(widget.music.imgSrc),
+                      backgroundImage: NetworkImage(widget.musicList[currentIndex].imgSrc),
                     ),
-                    title: Text(widget.music.name),
-                    subtitle: Text(widget.music.singer),
+                    title: Text(widget.musicList[currentIndex].name),
+                    subtitle: Text(widget.musicList[currentIndex].singer),
                   ),
                   Divider(),
                   ListTile(
@@ -93,9 +98,9 @@ class _MusicPlayerState extends State<MusicPlayer> {
                         : 'Add to Favorite'),
                     onTap: () {
                       if (isFavorite) {
-                        provider.removeFromFav(widget.music);
+                        provider.removeFromFav(widget.musicList[currentIndex]);
                       } else {
-                        provider.addToFav(widget.music);
+                        provider.addToFav(widget.musicList[currentIndex]);
                       }
                       Navigator.pop(context);
                     },
@@ -150,95 +155,103 @@ class _MusicPlayerState extends State<MusicPlayer> {
           ),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ClipRRect(
-            child: Image.network(
-              widget.music.imgSrc,
-              width: double.infinity,
-              height: 350,
-              fit: BoxFit.cover,
-            ),
-          ),
-          SizedBox(height: 32),
-          Text(
-            widget.music.name,
-            style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 4),
-          Text(widget.music.singer, style: TextStyle(fontSize: 20)),
-          Slider(
-            min: 0,
-            max: duration.inSeconds.toDouble(),
-            value: position.inSeconds.toDouble(),
-            onChanged: (value) async {
-              final position = Duration(seconds: value.toInt());
-              await audioPlayer.seek(position);
-              await audioPlayer.resume();
-            },
-          ),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(formatTime(position)),
-                Text(formatTime(duration - position)),
-              ],
-            ),
-          ),
-          SizedBox(height: 32),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: PageView.builder(
+        controller: _pageController,
+        onPageChanged: (index) async {
+          setState(() {
+            currentIndex = index;
+          });
+          await audioPlayer.stop();
+          setAudio();
+        },
+        itemCount: widget.musicList.length,
+        itemBuilder: (context, index) {
+          final music = widget.musicList[index];
+          return Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              IconButton(
-                icon: Icon(Icons.skip_previous),
-                iconSize: 50,
-                onPressed: () async {
-                  await audioPlayer.stop();
-                  final prevMusic =
-                      Provider.of<DataProvider>(context, listen: false)
-                          .getRandomMusic(widget.music);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MusicPlayer(music: prevMusic)),
-                  );
-                },
-              ),
-              CircleAvatar(
-                radius: 35,
-                child: IconButton(
-                  iconSize: 50,
-                  icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
-                  onPressed: () async {
-                    if (isPlaying) {
-                      await audioPlayer.pause();
-                    } else {
-                      await audioPlayer.resume();
-                    }
-                  },
+              ClipRRect(
+                child: Image.network(
+                  music.imgSrc,
+                  width: double.infinity,
+                  height: 350,
+                  fit: BoxFit.cover,
                 ),
               ),
-              IconButton(
-                icon: Icon(Icons.skip_next),
-                iconSize: 50,
-                onPressed: () async {
-                  await audioPlayer.stop();
-                  final nextMusic =
-                      Provider.of<DataProvider>(context, listen: false)
-                          .getRandomMusic(widget.music);
-                  Navigator.pushReplacement(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => MusicPlayer(music: nextMusic)),
-                  );
+              SizedBox(height: 32),
+              Text(
+                music.name,
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
+              SizedBox(height: 4),
+              Text(music.singer, style: TextStyle(fontSize: 20)),
+              Slider(
+                min: 0,
+                max: duration.inSeconds.toDouble(),
+                value: position.inSeconds.toDouble(),
+                onChanged: (value) async {
+                  final position = Duration(seconds: value.toInt());
+                  await audioPlayer.seek(position);
+                  await audioPlayer.resume();
                 },
               ),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 15),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(formatTime(position)),
+                    Text(formatTime(duration - position)),
+                  ],
+                ),
+              ),
+              SizedBox(height: 32),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  IconButton(
+                    icon: Icon(Icons.skip_previous),
+                    iconSize: 50,
+                    onPressed: () async {
+                      if (currentIndex > 0) {
+                        _pageController.previousPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                  ),
+                  CircleAvatar(
+                    radius: 35,
+                    child: IconButton(
+                      iconSize: 50,
+                      icon: Icon(isPlaying ? Icons.pause : Icons.play_arrow),
+                      onPressed: () async {
+                        if (isPlaying) {
+                          await audioPlayer.pause();
+                        } else {
+                          await audioPlayer.resume();
+                        }
+                      },
+                    ),
+                  ),
+                  IconButton(
+                    icon: Icon(Icons.skip_next),
+                    iconSize: 50,
+                    onPressed: () async {
+                      if (currentIndex < widget.musicList.length - 1) {
+                        _pageController.nextPage(
+                          duration: Duration(milliseconds: 300),
+                          curve: Curves.easeInOut,
+                        );
+                      }
+                    },
+                  ),
+                ],
+              ),
             ],
-          ),
-        ],
+          );
+        },
       ),
     );
   }

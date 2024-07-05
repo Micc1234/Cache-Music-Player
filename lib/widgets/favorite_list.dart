@@ -33,6 +33,8 @@ class FavoriteList extends StatelessWidget {
                   }
                 },
                 colorFunc: context.read<DataProvider>().colorFunc(music),
+                musicList: favoriteList,
+                initialIndex: favoriteList.indexOf(music),
               );
             }).toList(),
           );

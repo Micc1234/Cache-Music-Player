@@ -1,17 +1,22 @@
-import 'package:cache_music_player/screens/music_player_page.dart';
 import 'package:flutter/material.dart';
 import 'package:cache_music_player/models/music_class_model.dart';
+import 'package:cache_music_player/screens/music_player_page.dart';
 
 class MusicTile extends StatelessWidget {
-  MusicTile(
-      {super.key,
-      required this.music,
-      required this.colorFunc,
-      required this.favButtonFunc});
+  MusicTile({
+    Key? key,
+    required this.music,
+    required this.colorFunc,
+    required this.favButtonFunc,
+    required this.musicList,
+    required this.initialIndex,
+  }) : super(key: key);
 
   final Music music;
   final Color colorFunc;
   final Function() favButtonFunc;
+  final List<Music> musicList;
+  final int initialIndex;
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +26,12 @@ class MusicTile extends StatelessWidget {
         onTap: () {
           Navigator.push(
             context,
-            MaterialPageRoute(builder: (context) => MusicPlayer(music: music)),
+            MaterialPageRoute(
+              builder: (context) => MusicPlayer(
+                musicList: musicList,
+                initialIndex: initialIndex,
+              ),
+            ),
           );
         },
         child: Container(
@@ -44,9 +54,7 @@ class MusicTile extends StatelessWidget {
                           fit: BoxFit.cover,
                         ),
                       ),
-                      SizedBox(
-                        width: 10,
-                      ),
+                      SizedBox(width: 10),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -54,12 +62,14 @@ class MusicTile extends StatelessWidget {
                           Text(
                             music.name,
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
                           Text(
                             music.singer,
                             style: TextStyle(fontSize: 14),
-                          )
+                          ),
                         ],
                       ),
                       Spacer(),
@@ -67,7 +77,7 @@ class MusicTile extends StatelessWidget {
                         icon: Icon(Icons.favorite),
                         color: colorFunc,
                         onPressed: favButtonFunc,
-                      )
+                      ),
                     ],
                   ),
                 ),

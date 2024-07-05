@@ -21,11 +21,11 @@ class _SearchBarState extends State<SearchBar> {
       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(20),
-        color: Theme.of(context).backgroundColor,
+        color: Theme.of(context).colorScheme.background,
       ),
       child: TextField(
         controller: _searchController,
-        style: TextStyle(color: Theme.of(context).textTheme.bodyText1?.color),
+        style: TextStyle(color: Theme.of(context).textTheme.bodyLarge?.color),
         decoration: InputDecoration(
           hintText: 'What do you want to listen to?',
           hintStyle: TextStyle(color: Theme.of(context).hintColor),
