@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:audioplayers/audioplayers.dart';
 import 'package:cache_music_player/models/data_provider.dart';
 import 'package:cache_music_player/models/music_class_model.dart';
@@ -6,7 +8,8 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class MusicPlayer extends StatefulWidget {
-  MusicPlayer({Key? key, required this.musicList, required this.initialIndex}) : super(key: key);
+  MusicPlayer({Key? key, required this.musicList, required this.initialIndex})
+      : super(key: key);
 
   final List<Music> musicList;
   final int initialIndex;
@@ -23,6 +26,8 @@ class _MusicPlayerState extends State<MusicPlayer> {
   bool isHighQuality = false;
   late PageController _pageController;
   int currentIndex = 0;
+  Timer? _sleepTimer;
+  Duration _sleepDuration = Duration.zero;
 
   @override
   void initState() {
@@ -49,11 +54,24 @@ class _MusicPlayerState extends State<MusicPlayer> {
         position = newPosition;
       });
     });
+
+    audioPlayer.onPlayerComplete.listen((event) {
+      if (currentIndex < widget.musicList.length - 1) {
+        _pageController.nextPage(
+          duration: Duration(milliseconds: 300),
+          curve: Curves.easeInOut,
+        );
+      }
+    });
+
   }
 
   Future setAudio() async {
-    audioPlayer.setSource(AssetSource(widget.musicList[currentIndex].id.toString() + ".mp3"));
-  }
+  await audioPlayer.setSource(
+    AssetSource(widget.musicList[currentIndex].id.toString() + ".mp3"),
+  );
+  await audioPlayer.resume(); // Add this line to autoplay the song
+}
 
   String formatTime(Duration duration) {
     String twoDigits(int n) {
@@ -66,12 +84,36 @@ class _MusicPlayerState extends State<MusicPlayer> {
     return '$minutes : $seconds';
   }
 
+  void _startSleepTimer(Duration duration) {
+    setState(() {
+      _sleepDuration = duration;
+    });
+    _sleepTimer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(() {
+        if (_sleepDuration.inSeconds > 0) {
+          _sleepDuration = _sleepDuration - Duration(seconds: 1);
+        } else {
+          audioPlayer.stop();
+          audioPlayer.release();
+          _sleepTimer?.cancel();
+        }
+      });
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Text('Your sleep timer is set for ${_sleepDuration.inMinutes.remainder(60).toString().padLeft(2, '0')} minutes'),
+      duration: Duration(seconds: 2),
+    ),
+  );
+  }
+
   void _showBottomSheet() {
     showModalBottomSheet(
       context: context,
       builder: (context) {
         final provider = Provider.of<DataProvider>(context, listen: false);
-        bool isFavorite = provider.getFavList().contains(widget.musicList[currentIndex]);
+        bool isFavorite =
+            provider.getFavList().contains(widget.musicList[currentIndex]);
 
         return StatefulBuilder(
           builder: (context, setState) {
@@ -80,39 +122,79 @@ class _MusicPlayerState extends State<MusicPlayer> {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
+                  // ... other widgets ...
                   ListTile(
-                    leading: CircleAvatar(
-                      backgroundImage: NetworkImage(widget.musicList[currentIndex].imgSrc),
-                    ),
-                    title: Text(widget.musicList[currentIndex].name),
-                    subtitle: Text(widget.musicList[currentIndex].singer),
-                  ),
-                  Divider(),
-                  ListTile(
-                    leading: Icon(
-                      isFavorite ? Icons.favorite : Icons.favorite_border,
-                      color: isFavorite ? Colors.red : null,
-                    ),
-                    title: Text(isFavorite
-                        ? 'Remove from Favorite'
-                        : 'Add to Favorite'),
+                    leading: Icon(Icons.timer,
+                        color: _sleepDuration.inSeconds > 0
+                            ? Colors.purple
+                            : null),
+                    title: Text('Sleep Timer'),
+                    trailing: _sleepDuration.inSeconds > 0
+                        ? Text(
+                            '${_sleepDuration.inMinutes.remainder(60).toString().padLeft(2, '0')} min left')
+                        : null,
                     onTap: () {
-                      if (isFavorite) {
-                        provider.removeFromFav(widget.musicList[currentIndex]);
-                      } else {
-                        provider.addToFav(widget.musicList[currentIndex]);
-                      }
-                      Navigator.pop(context);
-                    },
-                  ),
-                  SwitchListTile(
-                    title: Text('High Quality'),
-                    secondary: Icon(Icons.audiotrack),
-                    value: isHighQuality,
-                    onChanged: (value) {
-                      setState(() {
-                        isHighQuality = value;
-                      });
+                      showModalBottomSheet(
+                        context: context,
+                        builder: (context) {
+                          return Container(
+                            padding: EdgeInsets.all(16),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                ListTile(
+                                  title: Text('5 minutes'),
+                                  onTap: () {
+                                    _startSleepTimer(Duration(minutes: 5));
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  title: Text('10 minutes'),
+                                  onTap: () {
+                                    _startSleepTimer(Duration(minutes: 10));
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  title: Text('15 minutes'),
+                                  onTap: () {
+                                    _startSleepTimer(Duration(minutes: 15));
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  title: Text('30 minutes'),
+                                  onTap: () {
+                                    _startSleepTimer(Duration(minutes: 30));
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  title: Text('45 minutes'),
+                                  onTap: () {
+                                    _startSleepTimer(Duration(minutes: 45));
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                                ListTile(
+                                  title: Text('1 hour'),
+                                  onTap: () {
+                                    _startSleepTimer(Duration(hours: 1));
+                                    Navigator.pop(context);
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      );
                     },
                   ),
                 ],
