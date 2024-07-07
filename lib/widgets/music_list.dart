@@ -32,6 +32,7 @@ class MusicList extends StatelessWidget {
                   colorFunc: context.read<DataProvider>().colorFunc(music),
                   musicList: musicList,
                   initialIndex: initialIndex,
+                  enableFav: true,
                 );
               }).toList(),
             ],

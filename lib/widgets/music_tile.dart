@@ -10,6 +10,7 @@ class MusicTile extends StatelessWidget {
     required this.favButtonFunc,
     required this.musicList,
     required this.initialIndex,
+    required this.enableFav,
   }) : super(key: key);
 
   final Music music;
@@ -17,6 +18,7 @@ class MusicTile extends StatelessWidget {
   final Function() favButtonFunc;
   final List<Music> musicList;
   final int initialIndex;
+  final bool enableFav;
 
   @override
   Widget build(BuildContext context) {
@@ -73,11 +75,27 @@ class MusicTile extends StatelessWidget {
                         ],
                       ),
                       Spacer(),
-                      IconButton(
-                        icon: Icon(Icons.favorite),
-                        color: colorFunc,
-                        onPressed: favButtonFunc,
-                      ),
+                      if (enableFav)
+                        IconButton(
+                          icon: Icon(Icons.favorite),
+                          color: colorFunc,
+                          onPressed: favButtonFunc,
+                        ),
+                      if (!enableFav) // Tambahkan kondisi untuk tombol play jika enableFav adalah false
+                        IconButton(
+                          icon: Icon(Icons.play_arrow),
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => MusicPlayer(
+                                  musicList: musicList,
+                                  initialIndex: initialIndex,
+                                ),
+                              ),
+                            );
+                          },
+                        ),
                     ],
                   ),
                 ),

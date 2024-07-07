@@ -1,4 +1,5 @@
 import 'package:cache_music_player/models/hits_class_model.dart';
+import 'package:cache_music_player/screens/hits_page.dart';
 import 'package:flutter/material.dart';
 
 class HitsCard extends StatelessWidget {
@@ -8,7 +9,14 @@ class HitsCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => HitsPage(hits: hits),
+          ),
+        );
+      },
       child: Container(
         height: 200,
         decoration: BoxDecoration(

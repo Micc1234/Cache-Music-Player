@@ -1,6 +1,7 @@
-import 'package:cache_music_player/models/user_data.dart';
-import 'package:cache_music_player/screens/login_page.dart';
 import 'package:flutter/material.dart';
+import 'package:cache_music_player/models/data_provider.dart';
+import 'package:cache_music_player/screens/login_page.dart';
+import 'package:provider/provider.dart';
 
 class RegisterPage extends StatefulWidget {
   const RegisterPage({super.key});
@@ -29,9 +30,9 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    // Check if the user already exists
-    bool userExists =
-        users.any((user) => user.username == username || user.email == email);
+    final provider = Provider.of<DataProvider>(context, listen: false);
+    bool userExists = provider.users
+        .any((user) => user.username == username || user.email == email);
 
     if (userExists) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -43,8 +44,8 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    // Success
-    addUser(username, email, password);
+    // Success: Add user and navigate to LoginPage
+    provider.addUser(username, email, password);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => LoginPage()));
   }

@@ -1,19 +1,19 @@
 import 'dart:math';
-
 import 'package:cache_music_player/models/hits_class_model.dart';
 import 'package:cache_music_player/models/music_class_model.dart';
 import 'package:flutter/material.dart';
+import 'package:cache_music_player/models/user_class_model.dart';
 
 class DataProvider extends ChangeNotifier {
   final List<Hits> _hitsData = [
     Hits(
-        name: "Taylor Swift Eras Tour",
+        name: "Study playlist",
         imgSrc:
-            "https://www.rollingstone.com/wp-content/uploads/2023/08/taylor-swift-eras-moments.jpg?w=1581&h=1054&crop=1"),
+            "https://i1.sndcdn.com/artworks-m5GmzxRYjSNAcqsi-XVbAiA-t500x500.jpg"),
     Hits(
-        name: "KPOP Hits 2022",
+        name: "What's trending",
         imgSrc:
-            "https://c.saavncdn.com/editorial/KPopHits2022_20231205072029.jpg"),
+            "https://qph.cf2.quoracdn.net/main-qimg-90f960560ccde6b8f4beeb7dbcfb5bbe-pjlq"),
     Hits(
         name: "Tops Hits",
         imgSrc:
@@ -111,12 +111,11 @@ class DataProvider extends ChangeNotifier {
   DataProvider() {
     _filteredMusicList = _musicData;
   }
-
-  List<Music> _favoriteData = [];
-
   List<Music> getMusicList() {
     return _filteredMusicList;
   }
+
+  List<Music> _favoriteData = [];
 
   void filterMusic(String filterValue) {
     if (filterValue == 'All') {
@@ -152,6 +151,13 @@ class DataProvider extends ChangeNotifier {
     notifyListeners();
   }
 
+  Music fabRandomMusic() {
+    Random random = Random();
+    Music randomMusic;
+    randomMusic = _musicData[random.nextInt(_musicData.length)];
+    return randomMusic;
+  }
+
   Music getRandomMusic(Music currentMusic) {
     Random random = Random();
     Music randomMusic;
@@ -161,5 +167,49 @@ class DataProvider extends ChangeNotifier {
     } while (randomMusic == currentMusic);
 
     return randomMusic;
+  }
+
+  List<Music> generateRandomMusicList() {
+    List<Music> randomMusicList = [];
+
+    Random random = Random();
+    int index = 0;
+
+    while (index < 7) {
+      Music randomMusic = _musicData[random.nextInt(_musicData.length)];
+      if (!randomMusicList.contains(randomMusic)) {
+        randomMusicList.add(randomMusic);
+        index++;
+      }
+    }
+
+    return randomMusicList;
+  }
+
+  final List<User> users = [
+    User(username: "user1", email: "user1@gmail.com", password: "pwd1"),
+    User(username: "user2", email: "user2@gmail.com", password: "pwd2"),
+  ];
+
+  User? _loggedInUser;
+
+  User? getLoggedInUser() {
+    return _loggedInUser;
+  }
+
+  bool loginAction(String email, String password) {
+    for (User user in users) {
+      if (user.email == email && user.password == password) {
+        _loggedInUser = user;
+        return true;
+      }
+    }
+    return false;
+  }
+
+  void addUser(String username, String email, String password) {
+    User newUser = User(username: username, email: email, password: password);
+    users.add(newUser);
+    notifyListeners();
   }
 }

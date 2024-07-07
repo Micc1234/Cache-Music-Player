@@ -1,5 +1,8 @@
+import 'package:cache_music_player/models/data_provider.dart';
 import 'package:cache_music_player/screens/login_page.dart';
-import 'package:cache_music_player/screens/notification_page.dart';
+import 'package:cache_music_player/screens/music_player_page.dart';
+import 'package:cache_music_player/screens/setting_page.dart';
+import 'package:cache_music_player/screens/whatsnew_page.dart';
 import 'package:cache_music_player/widgets/rating_dialog.dart';
 import 'package:cache_music_player/widgets/theme_provider.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +10,7 @@ import 'package:cache_music_player/screens/home_page.dart';
 import 'package:cache_music_player/screens/search_page.dart';
 import 'package:cache_music_player/screens/favorite_page.dart';
 import 'package:provider/provider.dart';
+import 'dart:math';
 
 class FirstPage extends StatefulWidget {
   FirstPage({super.key});
@@ -32,15 +36,25 @@ class _FirstPageState extends State<FirstPage> {
 
   @override
   Widget build(BuildContext context) {
+    final provider = Provider.of<DataProvider>(context);
+    final loggedInUser = provider.getLoggedInUser();
+
     return Scaffold(
       floatingActionButton: FloatingActionButton(
         onPressed: () {
-          showDialog(
-            context: context,
-            builder: (context) => RatingDialog(),
+          final musicList = provider.getMusicList();
+          int rand = Random().nextInt(musicList.length);
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (context) => MusicPlayer(
+                musicList: musicList,
+                initialIndex: rand,
+              ),
+            ),
           );
         },
-        child: Icon(Icons.star),
+        child: Icon(Icons.shuffle),
       ),
       drawer: Drawer(
         child: ListView(
@@ -70,19 +84,12 @@ class _FirstPageState extends State<FirstPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 10),
+                  SizedBox(height: 20),
                   Text(
-                    'John Doe',
+                    'Hello, ${loggedInUser?.username ?? 'Guest'}',
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 18,
-                    ),
-                  ),
-                  Text(
-                    'View profile',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 14,
                     ),
                   ),
                 ],
@@ -91,22 +98,32 @@ class _FirstPageState extends State<FirstPage> {
             ListTile(
               leading: Icon(Icons.bolt),
               title: Text("What's new"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.trending_up),
-              title: Text('Your Sound Capsule'),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.history),
-              title: Text('Listening history'),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => WhatsNewPage()),
+                );
+              },
             ),
             ListTile(
               leading: Icon(Icons.settings),
-              title: Text('setting and privacy'),
-              onTap: () {},
+              title: Text('Setting and privacy'),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
+              },
+            ),
+            ListTile(
+              leading: Icon(Icons.star),
+              title: Text('Rate this app'),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => RatingDialog(),
+                );
+              },
             ),
           ],
         ),
@@ -160,14 +177,6 @@ class _FirstPageState extends State<FirstPage> {
               onTap: () {
                 Scaffold.of(context).openDrawer();
               },
-              // child: Padding(
-              //   padding: EdgeInsets.all(8.0),
-              //   child: CircleAvatar(
-              //     radius: 20,
-              //     backgroundImage: AssetImage(
-              //         'assets/profile_pic.jpg'),
-              //   ),
-              // ),
               child: Icon(
                 Icons.account_circle_rounded,
                 color: Colors.white,

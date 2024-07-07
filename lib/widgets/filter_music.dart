@@ -9,7 +9,8 @@ class FilterMusic extends StatefulWidget {
   State<FilterMusic> createState() => _FilterMusicState();
 }
 
-class _FilterMusicState extends State<FilterMusic> with AutomaticKeepAliveClientMixin {
+class _FilterMusicState extends State<FilterMusic>
+    with AutomaticKeepAliveClientMixin {
   List<String> _filterValues = ['All', 'Indonesian', 'English'];
   String _selectedFilter = 'All';
 
@@ -19,27 +20,34 @@ class _FilterMusicState extends State<FilterMusic> with AutomaticKeepAliveClient
   @override
   void initState() {
     super.initState();
-    _selectedFilter = PageStorage.of(context).readState(context, identifier: 'selectedFilter') as String? ?? 'All';
+    _selectedFilter = PageStorage.of(context)
+            .readState(context, identifier: 'selectedFilter') as String? ??
+        'All';
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    return Wrap(
-      spacing: 20,
-      children: _filterValues.map((value) {
-        return FilterChip(
-          label: Text(value),
-          selected: _selectedFilter == value,
-          onSelected: (selected) {
-            setState(() {
-              _selectedFilter = selected ? value : 'All';
-              PageStorage.of(context).writeState(context, _selectedFilter, identifier: 'selectedFilter');
-              context.read<DataProvider>().filterMusic(_selectedFilter);
-            });
-          },
-        );
-      }).toList(),
+    return Container(
+      padding: EdgeInsets.symmetric(horizontal: 16),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: _filterValues.map((value) {
+          return FilterChip(
+            label: Text(value),
+            selected: _selectedFilter == value,
+            shape: StadiumBorder(),
+            onSelected: (selected) {
+              setState(() {
+                _selectedFilter = selected ? value : 'All';
+                PageStorage.of(context).writeState(context, _selectedFilter,
+                    identifier: 'selectedFilter');
+                context.read<DataProvider>().filterMusic(_selectedFilter);
+              });
+            },
+          );
+        }).toList(),
+      ),
     );
   }
 }

@@ -9,39 +9,89 @@ class RatingDialog extends StatefulWidget {
 class _RatingDialogState extends State<RatingDialog> {
   double rating = 0;
   TextEditingController _suggestionC = TextEditingController();
+  String _selectedOption = 'Sound Quality'; // Default selected option
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('Rate this app'),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          RatingBar.builder(
-            initialRating: 0,
-            minRating: 1,
-            direction: Axis.horizontal,
-            allowHalfRating: true,
-            itemCount: 5,
-            itemBuilder: (context, _) => Icon(
-              Icons.star,
-              color: Colors.amber,
+      content: SingleChildScrollView(
+        // Wrap content with SingleChildScrollView
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            RatingBar.builder(
+              initialRating: rating,
+              minRating: 1,
+              direction: Axis.horizontal,
+              allowHalfRating: true,
+              itemCount: 5,
+              itemPadding: EdgeInsets.symmetric(horizontal: 4.0),
+              itemBuilder: (context, _) => Icon(
+                Icons.star,
+                color: Colors.amber,
+              ),
+              onRatingUpdate: (newRating) {
+                setState(() {
+                  rating = newRating;
+                });
+              },
             ),
-            onRatingUpdate: (rating) {
-              setState(() {
-                this.rating = rating;
-              });
-            },
-          ),
-          SizedBox(height: 16),
-          TextField(
-            controller: _suggestionC,
-            decoration: InputDecoration(
-              border: OutlineInputBorder(),
-              labelText: 'Your suggestion',
+            SizedBox(height: 25),
+            Text('Select an area for feedback:'),
+            RadioListTile(
+              title: Text('Sound Quality'),
+              value: 'Sound Quality',
+              groupValue: _selectedOption,
+              onChanged: (value) {
+                setState(() {
+                  _selectedOption = value as String;
+                });
+              },
             ),
-          ),
-        ],
+            RadioListTile(
+              title: Text('User Interface'),
+              value: 'User Interface',
+              groupValue: _selectedOption,
+              onChanged: (value) {
+                setState(() {
+                  _selectedOption = value as String;
+                });
+              },
+            ),
+            RadioListTile(
+              title: Text('Performance'),
+              value: 'Performance',
+              groupValue: _selectedOption,
+              onChanged: (value) {
+                setState(() {
+                  _selectedOption = value as String;
+                });
+              },
+            ),
+            RadioListTile(
+              title: Text('Content'),
+              value: 'Content',
+              groupValue: _selectedOption,
+              onChanged: (value) {
+                setState(() {
+                  _selectedOption = value as String;
+                });
+              },
+            ),
+            SizedBox(
+              height: 25,
+            ),
+            TextField(
+              controller: _suggestionC,
+              decoration: InputDecoration(
+                border: OutlineInputBorder(),
+                labelText: 'Your suggestion',
+              ),
+            ),
+          ],
+        ),
       ),
       actions: [
         TextButton(
@@ -63,7 +113,7 @@ class _RatingDialogState extends State<RatingDialog> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Thank you for your feedback!',
+                        'Thank you for your feedback on $_selectedOption!',
                         style: TextStyle(fontSize: 18),
                       ),
                       SizedBox(height: 20),

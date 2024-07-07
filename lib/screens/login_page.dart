@@ -1,7 +1,8 @@
+import 'package:cache_music_player/models/data_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import 'package:cache_music_player/screens/first_page.dart';
 import 'package:cache_music_player/screens/register.page.dart';
-import 'package:cache_music_player/models/user_data.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -15,7 +16,7 @@ class _LoginPageState extends State<LoginPage> {
   TextEditingController passwordC = TextEditingController();
   bool _isLoading = false;
 
-  void _login() {
+  void _login(DataProvider dataProvider) {
     String email = emailC.text;
     String password = passwordC.text;
 
@@ -24,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
     });
 
     Future.delayed(Duration(seconds: 4), () {
-      bool valid = loginAction(email, password);
+      bool valid = dataProvider.loginAction(email, password);
 
       setState(() {
         _isLoading = false;
@@ -58,15 +59,6 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  TextButton(
-                    onPressed: () {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(builder: (context) => FirstPage()),
-                      );
-                    },
-                    child: Text("Shortcut"),
-                  ),
                   Text(
                     "Login",
                     style: TextStyle(fontSize: 40, fontWeight: FontWeight.bold),
@@ -101,7 +93,10 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      _login();
+                      // Access DataProvider using Provider
+                      final dataProvider =
+                          Provider.of<DataProvider>(context, listen: false);
+                      _login(dataProvider);
                     },
                     child: Text("Login"),
                   ),
