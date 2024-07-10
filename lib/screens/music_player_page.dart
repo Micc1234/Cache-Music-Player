@@ -124,12 +124,11 @@ class _MusicPlayerState extends State<MusicPlayer> {
                 children: [
                   ListTile(
                     leading: CircleAvatar(
-                      backgroundImage: NetworkImage(
-                          widget.musicList[widget.initialIndex].imgSrc),
+                      backgroundImage:
+                          NetworkImage(widget.musicList[currentIndex].imgSrc),
                     ),
-                    title: Text(widget.musicList[widget.initialIndex].name),
-                    subtitle:
-                        Text(widget.musicList[widget.initialIndex].singer),
+                    title: Text(widget.musicList[currentIndex].name),
+                    subtitle: Text(widget.musicList[currentIndex].singer),
                   ),
                   Divider(),
                   ListTile(
@@ -142,11 +141,9 @@ class _MusicPlayerState extends State<MusicPlayer> {
                         : 'Add to Favorite'),
                     onTap: () {
                       if (isFavorite) {
-                        provider.removeFromFav(
-                            widget.musicList[widget.initialIndex]);
+                        provider.removeFromFav(widget.musicList[currentIndex]);
                       } else {
-                        provider
-                            .addToFav(widget.musicList[widget.initialIndex]);
+                        provider.addToFav(widget.musicList[currentIndex]);
                       }
                       Navigator.pop(context);
                     },

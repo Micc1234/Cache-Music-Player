@@ -5,25 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:cache_music_player/models/user_class_model.dart';
 
 class DataProvider extends ChangeNotifier {
-  final List<Hits> _hitsData = [
-    Hits(
-        name: "Study playlist",
-        imgSrc:
-            "https://i1.sndcdn.com/artworks-m5GmzxRYjSNAcqsi-XVbAiA-t500x500.jpg"),
-    Hits(
-        name: "What's trending",
-        imgSrc:
-            "https://qph.cf2.quoracdn.net/main-qimg-90f960560ccde6b8f4beeb7dbcfb5bbe-pjlq"),
-    Hits(
-        name: "Tops Hits",
-        imgSrc:
-            "https://i.scdn.co/image/ab67616d0000b273674ee85ea544f17b5726c54b"),
-    Hits(
-        name: "Tiktok Hits",
-        imgSrc:
-            "https://i1.sndcdn.com/artworks-6e9dSkKPEWWT8IPM-uW8Zyw-t500x500.jpg")
-  ];
-
   final List<Music> _musicData = [
     Music(
         id: 1,
@@ -105,6 +86,78 @@ class DataProvider extends ChangeNotifier {
             "https://americannoise.com/wp-content/uploads/2018/07/Taylor-Swift-Love-Story-1200x900.jpg",
         favorite: false,
         lang: "English"),
+    Music(
+      id: 11,
+      name: "Surat Cinta Untuk Starla",
+      singer: "Virgoun",
+      imgSrc:
+          "https://awsimages.detik.net.id/community/media/visual/2016/03/01/1c7c83f2-05d7-43a5-852c-7897f88a2731.jpg?w=600&q=90",
+      favorite: false,
+      lang: "Indonesian",
+    ),
+    Music(
+      id: 12,
+      name: "Dari Planet Lain",
+      singer: "Sal Priadi",
+      imgSrc:
+          "https://asset-a.grid.id/crop/0x0:0x0/x/photo/2024/04/18/fotojet-14jpg-20240418015616.jpg",
+      favorite: false,
+      lang: "Indonesian",
+    ),
+    Music(
+      id: 13,
+      name: "Satu Satu",
+      singer: "Igditaf",
+      imgSrc:
+          "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQvEUoR5u50lUYZqWHQ0tq76Bf_9zGNs07nIQ&s",
+      favorite: false,
+      lang: "Indonesian",
+    ),
+    Music(
+      id: 14,
+      name: "Dia",
+      singer: "Anji",
+      imgSrc: "https://i1.sndcdn.com/artworks-000206427888-t488kr-t500x500.jpg",
+      favorite: false,
+      lang: "Indonesian",
+    ),
+    Music(
+      id: 15,
+      name: "Melukis Senja",
+      singer: "Budi Doremi",
+      imgSrc:
+          "https://i.scdn.co/image/ab67616d0000b27337f883f98514a0852046e2f0",
+      favorite: false,
+      lang: "Indonesian",
+    ),
+    Music(
+      id: 16,
+      name: "Penjaga Hati",
+      singer: "Nadhif Basalamah",
+      imgSrc:
+          "https://i1.sndcdn.com/artworks-Qv2tMzibfMdiA8sv-Us3jhQ-t500x500.jpg",
+      favorite: false,
+      lang: "Indonesian",
+    ),
+  ];
+
+  final List<Hits> _hitsData = [
+    Hits(
+        name: "Study playlist",
+        imgSrc:
+            "https://i1.sndcdn.com/artworks-m5GmzxRYjSNAcqsi-XVbAiA-t500x500.jpg"),
+    Hits(
+        name: "What's trending",
+        imgSrc:
+            "https://qph.cf2.quoracdn.net/main-qimg-90f960560ccde6b8f4beeb7dbcfb5bbe-pjlq"),
+    Hits(
+        name: "Tops Hits",
+        imgSrc:
+            "https://i.scdn.co/image/ab67616d0000b273674ee85ea544f17b5726c54b"),
+    Hits(
+        name: "Tiktok Hits",
+        imgSrc:
+            "https://i1.sndcdn.com/artworks-6e9dSkKPEWWT8IPM-uW8Zyw-t500x500.jpg")
   ];
 
   List<Music> _filteredMusicList = [];
