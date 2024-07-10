@@ -44,7 +44,6 @@ class _RegisterPageState extends State<RegisterPage> {
       return;
     }
 
-    // Success: Add user and navigate to LoginPage
     provider.addUser(username, email, password);
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => LoginPage()));

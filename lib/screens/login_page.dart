@@ -93,7 +93,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   ElevatedButton(
                     onPressed: () {
-                      // Access DataProvider using Provider
                       final dataProvider =
                           Provider.of<DataProvider>(context, listen: false);
                       _login(dataProvider);

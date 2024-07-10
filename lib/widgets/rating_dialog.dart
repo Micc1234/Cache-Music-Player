@@ -9,14 +9,13 @@ class RatingDialog extends StatefulWidget {
 class _RatingDialogState extends State<RatingDialog> {
   double rating = 0;
   TextEditingController _suggestionC = TextEditingController();
-  String _selectedOption = 'Sound Quality'; // Default selected option
+  String _selectedOption = 'Sound Quality';
 
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       title: Text('Rate this app'),
       content: SingleChildScrollView(
-        // Wrap content with SingleChildScrollView
         child: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,

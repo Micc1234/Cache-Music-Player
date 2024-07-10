@@ -81,7 +81,7 @@ class MusicTile extends StatelessWidget {
                           color: colorFunc,
                           onPressed: favButtonFunc,
                         ),
-                      if (!enableFav) // Tambahkan kondisi untuk tombol play jika enableFav adalah false
+                      if (!enableFav)
                         IconButton(
                           icon: Icon(Icons.play_arrow),
                           onPressed: () {

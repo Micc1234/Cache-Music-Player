@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:cache_music_player/models/data_provider.dart'; // Pastikan ini sesuai dengan lokasi DataProvider Anda
+import 'package:cache_music_player/models/data_provider.dart';
 
 class SettingsPage extends StatefulWidget {
   @override
@@ -15,9 +15,9 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _isNormalizeVolumeOn = false;
   bool _isMonoAudioOn = false;
 
-  String _username = ""; // Update nilai awal sesuai pengguna yang login
-  String _email = ""; // Update nilai awal sesuai pengguna yang login
-  DateTime _birthDate = DateTime(1990, 1, 1); // Initial birth date
+  String _username = "";
+  String _email = "";
+  DateTime _birthDate = DateTime(1990, 1, 1);
 
   void _toggleDataSaver(value) {
     setState(() {
@@ -50,7 +50,6 @@ class _SettingsPageState extends State<SettingsPage> {
     final provider = Provider.of<DataProvider>(context);
     final loggedInUser = provider.getLoggedInUser();
 
-    // Update username dan email sesuai dengan pengguna yang sedang login
     _username = loggedInUser?.username ?? "";
     _email = loggedInUser?.email ?? "";
 
@@ -73,23 +72,19 @@ class _SettingsPageState extends State<SettingsPage> {
           ListTile(
             title: Text('Username'),
             subtitle: Text(_username),
-            onTap: () {
-              // TODO: Implement editing username
-            },
+            onTap: () {},
           ),
           ListTile(
             title: Text('Email'),
             subtitle: Text(_email),
-            onTap: () {
-              // TODO: Implement editing email
-            },
+            onTap: () {},
           ),
           ListTile(
             title: Text('Birth Date'),
             subtitle: Text(
                 '${_birthDate.day}/${_birthDate.month}/${_birthDate.year}'),
             onTap: () {
-              _selectDate(context); // Open date picker
+              _selectDate(context);
             },
           ),
           SizedBox(
