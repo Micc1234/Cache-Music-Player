@@ -142,8 +142,20 @@ class _MusicPlayerState extends State<MusicPlayer> {
                     onTap: () {
                       if (isFavorite) {
                         provider.removeFromFav(widget.musicList[currentIndex]);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Removed from Favorite'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
                       } else {
                         provider.addToFav(widget.musicList[currentIndex]);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Added to Favorite'),
+                            duration: Duration(seconds: 2),
+                          ),
+                        );
                       }
                       Navigator.pop(context);
                     },
